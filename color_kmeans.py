@@ -4,9 +4,11 @@
 # import the necessary packages
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import argparse
 import utils
 import cv2
+from colormap import hex2rgb
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -22,7 +24,7 @@ image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 plt.style.use('dark_background')
 
 # show our image
-plt.figure()
+plt.figure(figsize=(4, 4))
 plt.axis("off")
 plt.imshow(image)
 
@@ -36,11 +38,21 @@ clt.fit(image)
 # build a histogram of clusters and then create a figure
 # representing the number of pixels labeled to each color
 hist = utils.centroid_histogram(clt)
-bar = utils.plot_colors(hist, clt.cluster_centers_)
+# bar = utils.plot_colors(hist, clt.cluster_centers_)
 
-# show our color bart
-plt.figure()
-plt.axis("off")
-plt.imshow(bar)
-plt.style.use('dark_background')
+primaryColor, secondaryColor = utils.findPri_Sec(hist, clt.cluster_centers_)
+
+print(f'primary = {primaryColor}, secondary = {secondaryColor}')
+
+# show our color bar
+# plt.figure()
+# plt.axis("off")
+
+# plt.imshow(bar)
+# plt.style.use('dark_background')
+
+plt.figure(figsize=(4, 4))
+currentAxis = plt.gca()
+currentAxis.add_patch(Rectangle((0.2 - 0.1, 0.5 - 0.1), 0.2, 0.2, fill = True, color = primaryColor))
+currentAxis.add_patch(Rectangle((0.5 - 0.1, 0.5 - 0.1), 0.2, 0.2, fill = True, color = secondaryColor))
 plt.show()
