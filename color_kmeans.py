@@ -19,6 +19,7 @@ args = vars(ap.parse_args())
 # we can dispaly it with matplotlib
 image = cv2.imread(args["image"])
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+image = cv2.resize(image, None, fx = 0.2, fy = 0.2)
 plt.style.use('dark_background')
 
 # show our image
